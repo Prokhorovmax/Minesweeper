@@ -11,7 +11,7 @@ public class Board extends JPanel {
     // Field parameters:
     private final int xNum = 20;
     private final int yNum = 20;
-    private final int minesNum = 40;
+    private final int minesNum = 50;
 
     private int[][] minesCount = new int[xNum][yNum];
     private Cell[][] cells = new Cell[xNum][yNum];
@@ -149,6 +149,7 @@ public class Board extends JPanel {
                     } else {
                         cells[i][j].setOpen();
                         cells[i][j].setColor(Color.WHITE);
+                        checkWin();
                     }
                 }
             }
@@ -160,7 +161,6 @@ public class Board extends JPanel {
         for (int i = 0; i < yNum; i++) {
             for (int j = 0; j < xNum; j++) {
                 if (cells[i][j].getPolygon().contains(x, y)) {
-                    cells[i][j].setOpen();
                     cells[i][j].setColor(Color.GREEN);
                 }
             }
@@ -171,6 +171,7 @@ public class Board extends JPanel {
     private void lost() {
         for (int i = 0; i < yNum; i++) {
             for (int j = 0; j < xNum; j++) {
+                cells[i][j].setOpen();
                 if (cells[i][j].getColor() != Color.GREEN) {
                     if (minesCount[i][j] == MINE) {
                         cells[i][j].setColor(Color.RED);
@@ -183,12 +184,11 @@ public class Board extends JPanel {
                 }
             }
         }
+        JOptionPane.showMessageDialog(null, "Unfortunately, You lost!");
     }
 
-    public void clearZeros(ArrayList<Integer> toClear) {
-        if (toClear.size() == 0) {
-            return;
-        } else {
+    private void clearZeros(ArrayList<Integer> toClear) {
+        if (toClear.size() != 0) {
             int i = toClear.get(0) / 100;
             int j = toClear.get(0) % 100;
             toClear.remove(0);
@@ -196,6 +196,7 @@ public class Board extends JPanel {
                 // up left
                 if (i > 0 && !cells[i - 1][j].isOpen()) {
                     cells[i - 1][j].setOpen();
+                    cells[i - 1][j].setColor(Color.WHITE);
                     if (minesCount[i - 1][j] == 0) {
                         toClear.add((i - 1) * 100 + j);
                     }
@@ -203,6 +204,7 @@ public class Board extends JPanel {
                 // up right
                 if (i > 0 && j < xNum - 1 && !cells[i - 1][j + 1].isOpen()) {
                     cells[i - 1][j + 1].setOpen();
+                    cells[i - 1][j + 1].setColor(Color.WHITE);
                     if (minesCount[i - 1][j + 1] == 0) {
                         toClear.add((i - 1) * 100 + (j + 1));
                     }
@@ -210,6 +212,7 @@ public class Board extends JPanel {
                 // right
                 if (j < xNum - 1 && !cells[i][j + 1].isOpen()) {
                     cells[i][j + 1].setOpen();
+                    cells[i][j + 1].setColor(Color.WHITE);
                     if (minesCount[i][j + 1] == 0) {
                         toClear.add(i * 100 + (j + 1));
                     }
@@ -217,6 +220,7 @@ public class Board extends JPanel {
                 // down right
                 if (i < yNum - 1 && j < xNum - 1 && !cells[i + 1][j + 1].isOpen()) {
                     cells[i + 1][j + 1].setOpen();
+                    cells[i + 1][j + 1].setColor(Color.WHITE);
                     if (minesCount[i + 1][j + 1] == 0) {
                         toClear.add((i + 1) * 100 + (j + 1));
                     }
@@ -224,6 +228,7 @@ public class Board extends JPanel {
                 // down left
                 if (i < yNum - 1 && !cells[i + 1][j].isOpen()) {
                     cells[i + 1][j].setOpen();
+                    cells[i + 1][j].setColor(Color.WHITE);
                     if (minesCount[i + 1][j] == 0) {
                         toClear.add((i + 1) * 100 + j);
                     }
@@ -231,6 +236,7 @@ public class Board extends JPanel {
                 // left
                 if (j > 0 && !cells[i][j - 1].isOpen()) {
                     cells[i][j - 1].setOpen();
+                    cells[i][j - 1].setColor(Color.WHITE);
                     if (minesCount[i][j - 1] == 0) {
                         toClear.add(i * 100 + (j - 1));
                     }
@@ -239,6 +245,7 @@ public class Board extends JPanel {
                 // up left
                 if (i > 0 && j > 0 && !cells[i - 1][j - 1].isOpen()) {
                     cells[i - 1][j - 1].setOpen();
+                    cells[i - 1][j - 1].setColor(Color.WHITE);
                     if (minesCount[i - 1][j - 1] == 0) {
                         toClear.add((i - 1) * 100 + (j - 1));
                     }
@@ -246,6 +253,7 @@ public class Board extends JPanel {
                 // up right
                 if (i > 0 && !cells[i - 1][j].isOpen()) {
                     cells[i - 1][j].setOpen();
+                    cells[i - 1][j].setColor(Color.WHITE);
                     if (minesCount[i - 1][j] == 0) {
                         toClear.add((i - 1) * 100 + j);
                     }
@@ -253,6 +261,7 @@ public class Board extends JPanel {
                 // right
                 if (j < xNum - 1 && !cells[i][j + 1].isOpen()) {
                     cells[i][j + 1].setOpen();
+                    cells[i][j + 1].setColor(Color.WHITE);
                     if (minesCount[i][j + 1] == 0) {
                         toClear.add(i * 100 + (j + 1));
                     }
@@ -260,6 +269,7 @@ public class Board extends JPanel {
                 // down right
                 if (i < yNum - 1 && !cells[i + 1][j].isOpen()) {
                     cells[i + 1][j].setOpen();
+                    cells[i + 1][j].setColor(Color.WHITE);
                     if (minesCount[i + 1][j] == 0) {
                         toClear.add((i + 1) * 100 + j);
                     }
@@ -267,6 +277,7 @@ public class Board extends JPanel {
                 // down left
                 if (i < yNum - 1 && j > 0 && !cells[i + 1][j - 1].isOpen()) {
                     cells[i + 1][j - 1].setOpen();
+                    cells[i + 1][j - 1].setColor(Color.WHITE);
                     if (minesCount[i + 1][j - 1] == 0) {
                         toClear.add((i + 1) * 100 + (j - 1));
                     }
@@ -274,6 +285,7 @@ public class Board extends JPanel {
                 // left
                 if (j > 0 && !cells[i][j - 1].isOpen()) {
                     cells[i][j - 1].setOpen();
+                    cells[i][j - 1].setColor(Color.WHITE);
                     if (minesCount[i][j - 1] == 0) {
                         toClear.add(i * 100 + (j - 1));
                     }
@@ -283,7 +295,7 @@ public class Board extends JPanel {
         }
     }
 
-    public void checkWin() {
+    private void checkWin() {
         boolean win = true;
         for (int i = 0; i < yNum; i++) {
             for (int j = 0; j < xNum; j++) {
@@ -294,6 +306,13 @@ public class Board extends JPanel {
             }
         }
         if (win) {
+            for (int i = 0; i < yNum; i++) {
+                for (int j = 0; j < xNum; j++) {
+                    if (minesCount[i][j] == MINE) {
+                        cells[i][j].setColor(Color.GREEN);
+                    }
+                }
+            }
             JOptionPane.showMessageDialog(null, "Congratulations, You won!");
         }
     }
@@ -308,10 +327,14 @@ public class Board extends JPanel {
                 g.fillPolygon(cells[i][j].getPolygon());
                 g.setColor(Color.BLACK);
                 g.drawPolygon(cells[i][j].getPolygon());
-                g.setFont(new Font("Arial", Font.BOLD, 14));
-                int x = cells[i][j].getPolygon().xpoints[0] - 2;
-                int y = cells[i][j].getPolygon().ypoints[0] + 23;
-                g.drawString(minesCount[i][j] + "", x, y);
+                if (cells[i][j].isOpen()) {
+                    g.setFont(new Font("Arial", Font.BOLD, 14));
+                    int x = cells[i][j].getPolygon().xpoints[0] - 2;
+                    int y = cells[i][j].getPolygon().ypoints[0] + 23;
+                    if (minesCount[i][j] != MINE) {
+                        g.drawString(minesCount[i][j] + "", x, y);
+                    }
+                }
             }
         }
     }
