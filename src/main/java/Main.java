@@ -1,41 +1,15 @@
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-import static java.awt.BorderLayout.CENTER;
-import static java.awt.BorderLayout.NORTH;
+public class Main {
 
+    private static JFrame mainFrame;
 
-public class Main extends JFrame implements ActionListener {
-    private JButton reset = new JButton("RESET");
-
-    private Main(String s) {
-        setVisible(true);
-        setSize(635, 585);
-        setTitle("Minesweeper");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        Toolkit toolkit = getToolkit();
-        Dimension size = toolkit.getScreenSize();
-        setLocation(size.width / 2 - getWidth() / 2,
-                size.height / 2 - getHeight() / 2);
-
-        setLayout(new BorderLayout());
-        add(reset, NORTH);
-        reset.addActionListener(this);
-        add(new Board(), CENTER);
+    public void newGame(int col, int row, int mines) {
+        mainFrame.dispose();
+        mainFrame = new MainFrame(col, row, mines);
     }
 
     public static void main(String[] args) {
-        new Main("Minesweeper");
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource().equals(reset)) {
-            dispose();
-            new Main("Minesweeper");
-        }
+        mainFrame = new MainFrame(20, 20, 50);
     }
 }

@@ -9,24 +9,28 @@ import java.util.ArrayList;
 public class Board extends JPanel {
 
     // Field parameters:
-    private final int xNum = 20;
-    private final int yNum = 20;
-    private final int minesNum = 50;
+    private int xNum;
+    private int yNum;
+    private int minesNum;
 
-    private int[][] minesCount = new int[xNum][yNum];
-    private Cell[][] cells = new Cell[xNum][yNum];
-    private static final int MINE = 10;
+    private int[][] minesCount;
+    private Cell[][] cells;
+    private final int MINE = 10;
 
-    public Board() {
+    public Board(int xNum, int yNum, int minesNum) {
         super();
-        setBackground(Color.gray);
+        this.xNum = xNum;
+        this.yNum = yNum;
+        this.minesNum = minesNum;
+        this.minesCount = new int[yNum][xNum];
+        this.cells = new Cell[yNum][xNum];
+        setBackground(Color.GRAY);
         createBoard();
         createMines();
         this.addMouseListener(
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        super.mouseClicked(e);
                         if (e.getButton() == MouseEvent.BUTTON1) {
                             leftClick(e.getX(), e.getY());
                         }
@@ -61,7 +65,7 @@ public class Board extends JPanel {
                 list.add(i * 100 + j);
             }
         }
-        minesCount = new int[xNum][yNum];
+        minesCount = new int[yNum][xNum];
         for (int i = 0; i < minesNum; i++) {
             int random = (int) (Math.random() * list.size());
             minesCount[list.get(random) / 100][list.get(random) % 100] = MINE;
@@ -160,8 +164,12 @@ public class Board extends JPanel {
     private void rightClick(int x, int y) {
         for (int i = 0; i < yNum; i++) {
             for (int j = 0; j < xNum; j++) {
-                if (cells[i][j].getPolygon().contains(x, y)) {
-                    cells[i][j].setColor(Color.GREEN);
+                if (cells[i][j].getPolygon().contains(x, y) && !cells[i][j].isOpen()) {
+                    if (cells[i][j].getColor() == Color.GREEN) {
+                        cells[i][j].setColor(Color.LIGHT_GRAY);
+                    } else {
+                        cells[i][j].setColor(Color.GREEN);
+                    }
                 }
             }
         }
@@ -185,6 +193,7 @@ public class Board extends JPanel {
             }
         }
         JOptionPane.showMessageDialog(null, "Unfortunately, You lost!");
+        removeMouseListener(getMouseListeners()[0]);
     }
 
     private void clearZeros(ArrayList<Integer> toClear) {
@@ -314,6 +323,7 @@ public class Board extends JPanel {
                 }
             }
             JOptionPane.showMessageDialog(null, "Congratulations, You won!");
+            removeMouseListener(getMouseListeners()[0]);
         }
     }
 
