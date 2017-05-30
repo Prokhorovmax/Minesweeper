@@ -22,9 +22,9 @@ public class Settings extends JFrame {
         JButton ok = new JButton("OK");
         ok.setFocusPainted(false);
 
-        JLabel text1 = new JLabel("ENTER COLUMN NUMBER [6..40]:");
-        JLabel text2 = new JLabel("ENTER ROW NUMBER [2..30]:");
-        JLabel text3 = new JLabel("ENTER MINES NUMBER:");
+        JLabel text1 = new JLabel("ENTER THE COLUMN NUMBER [6..40]:");
+        JLabel text2 = new JLabel("ENTER THE ROW NUMBER [2..30]:");
+        JLabel text3 = new JLabel("ENTER THE MINES NUMBER:");
         JLabel text4 = new JLabel("TO SAVE CHANGES PRESS OK.");
         text1.setHorizontalAlignment(SwingConstants.CENTER);
         text2.setHorizontalAlignment(SwingConstants.CENTER);
@@ -46,7 +46,7 @@ public class Settings extends JFrame {
                         final int columnNumber = Integer.parseInt(column.getText());
                         final int rowNumber = Integer.parseInt(row.getText());
                         final int minesNumber = Integer.parseInt(mines.getText());
-                        if (columnNumber > 6 && columnNumber < 41 && rowNumber > 1 && rowNumber < 31 &&
+                        if (columnNumber > 5 && columnNumber < 41 && rowNumber > 1 && rowNumber < 31 &&
                                 minesNumber < rowNumber * columnNumber) {
                             dispose();
                             new Main().newGame(columnNumber, rowNumber, minesNumber);

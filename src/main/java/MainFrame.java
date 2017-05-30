@@ -7,7 +7,7 @@ import static java.awt.BorderLayout.NORTH;
 public class MainFrame extends JFrame {
 
     public MainFrame(int columnNumber, int rowNumber, int minesNumber) {
-        setSize(30 * (columnNumber + 1) + 5, 25 * rowNumber + 95);
+        setSize(30 * (columnNumber + 1) + 5, 25 * rowNumber + 115);
         setTitle("Minesweeper");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 

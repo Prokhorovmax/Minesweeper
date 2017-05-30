@@ -9,12 +9,13 @@ import java.util.ArrayList;
 public class Board extends JPanel {
 
     // Field parameters:
-    private int xNum;
-    private int yNum;
-    private int minesNum;
+    private final int xNum;
+    private final int yNum;
+    private final int minesNum;
 
     private int[][] minesCount;
     private Cell[][] cells;
+    private int flagCounter;
     private final int MINE = 10;
 
     public Board(int xNum, int yNum, int minesNum) {
@@ -24,6 +25,7 @@ public class Board extends JPanel {
         this.minesNum = minesNum;
         this.minesCount = new int[yNum][xNum];
         this.cells = new Cell[yNum][xNum];
+        this.flagCounter = minesNum;
         setBackground(Color.GRAY);
         createBoard();
         createMines();
@@ -47,10 +49,10 @@ public class Board extends JPanel {
         for (int i = 0; i < yNum; i++) {
             for (int j = 0; j < xNum; j++) {
                 if (i % 2 == 0) {
-                    final Point point = new Point(30 * (j + 1), 25 * i);
+                    final Point point = new Point(30 * (j + 1), 25 * i + 20);
                     cells[i][j] = new Cell(point);
                 } else {
-                    final Point point = new Point(30 * (j + 1) - 15, 25 * i);
+                    final Point point = new Point(30 * (j + 1) - 15, 25 * i + 20);
                     cells[i][j] = new Cell(point);
                 }
             }
@@ -132,7 +134,6 @@ public class Board extends JPanel {
                 }
             }
         }
-
     }
 
     private void leftClick(int x, int y) {
@@ -167,8 +168,10 @@ public class Board extends JPanel {
                 if (cells[i][j].getPolygon().contains(x, y) && !cells[i][j].isOpen()) {
                     if (cells[i][j].getColor() == Color.GREEN) {
                         cells[i][j].setColor(Color.LIGHT_GRAY);
+                        flagCounter++;
                     } else {
                         cells[i][j].setColor(Color.GREEN);
+                        flagCounter--;
                     }
                 }
             }
@@ -322,6 +325,7 @@ public class Board extends JPanel {
                     }
                 }
             }
+            flagCounter = 0;
             JOptionPane.showMessageDialog(null, "Congratulations, You won!");
             removeMouseListener(getMouseListeners()[0]);
         }
@@ -333,6 +337,9 @@ public class Board extends JPanel {
         super.paintComponent(g);
         for (int i = 0; i < yNum; i++) {
             for (int j = 0; j < xNum; j++) {
+                g.setColor(Color.GREEN);
+                g.setFont(new Font("Arial", Font.BOLD, 16));
+                g.drawString("MINES REMAINING: " + flagCounter, 15 * (xNum - 5), 12);
                 g.setColor(cells[i][j].getColor());
                 g.fillPolygon(cells[i][j].getPolygon());
                 g.setColor(Color.BLACK);
